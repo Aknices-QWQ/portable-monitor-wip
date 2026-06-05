@@ -18,6 +18,7 @@
 .
 ├── Hardware/
 │   ├── [开发中]便携监护仪.epro2
+│   ├── portable-monitor-altium-2026-06-05.zip
 │   ├── 底板.pdf
 │   └── 顶板.pdf
 ├── Software/
@@ -38,6 +39,7 @@
 当前包含：
 
 - `[开发中]便携监护仪.epro2`：硬件工程文件
+- `portable-monitor-altium-2026-06-05.zip`：Altium 格式导出包
 - `底板.pdf`：底板相关导出文件
 - `顶板.pdf`：顶板相关导出文件
 
