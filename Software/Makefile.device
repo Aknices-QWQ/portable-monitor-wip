@@ -1,0 +1,63 @@
+ifeq ($(origin CC), default)
+CC := /home/talowe/Desktop/T113/talowe-T113-I-Tina-sdk/brandy/brandy-2.0/tools/toolchain/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi/bin/arm-linux-gnueabi-gcc
+endif
+
+HOST_SYSROOT ?= /home/talowe/Desktop/T113/talowe-T113-I-Tina-sdk/brandy/brandy-2.0/tools/toolchain/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi/arm-linux-gnueabi/libc
+ARCH_CFLAGS ?=
+SYSROOT_CFLAGS := $(if $(HOST_SYSROOT),--sysroot=$(HOST_SYSROOT))
+export STAGING_DIR := $(HOST_SYSROOT)
+
+PROJECT_ROOT := $(CURDIR)
+INCLUDE_DIR := $(PROJECT_ROOT)/include
+SRC_DIR := $(PROJECT_ROOT)/src
+FONT_DIR := $(PROJECT_ROOT)/assets/fonts/generated_fonts
+SDK_ROOT ?= $(PROJECT_ROOT)/talowe-T113-I-Tina-sdk
+LVGL_PORT_ROOT ?= $(SDK_ROOT)/platform/thirdparty/gui/lvgl-8
+LVGL_DIR_NAME ?= lvgl
+LVGL_DIR ?= $(LVGL_PORT_ROOT)
+CFG_DIR ?= $(LVGL_PORT_ROOT)/lv_examples/src
+BIN ?= ecg_monitor_t113
+
+CFLAGS ?= -O2 -g0
+CFLAGS += $(ARCH_CFLAGS) $(SYSROOT_CFLAGS) -I$(INCLUDE_DIR) -I$(CFG_DIR) -I$(LVGL_DIR)/ -I$(LVGL_DIR)/lv_drivers -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-function
+LDFLAGS ?= -lm -lpthread
+LDFLAGS += $(SYSROOT_CFLAGS)
+
+APP_SRCS := $(SRC_DIR)/platform/device_main.c \
+	$(SRC_DIR)/app/ecg_monitor_keypad_lvgl.c \
+	$(FONT_DIR)/ecg_font_zh_16.c \
+	$(FONT_DIR)/ecg_font_zh_20.c \
+	$(FONT_DIR)/ecg_font_zh_28.c \
+	$(FONT_DIR)/ecg_font_en_16.c \
+	$(FONT_DIR)/ecg_font_en_20.c \
+	$(FONT_DIR)/ecg_font_en_22.c \
+	$(FONT_DIR)/ecg_font_en_36.c \
+	$(FONT_DIR)/ecg_font_en_48.c \
+	$(FONT_DIR)/ecg_font_en_56.c \
+	$(FONT_DIR)/ecg_font_en_64.c
+
+include $(LVGL_DIR)/lvgl/lvgl.mk
+
+EXCSRCS += $(shell find -L $(LVGL_DIR)/$(LVGL_DIR_NAME)/examples -name \*.c)
+EXCSRCS += $(shell find -L $(LVGL_DIR)/$(LVGL_DIR_NAME)/demos -name \*.c)
+CSRCS := $(filter-out $(EXCSRCS),$(CSRCS))
+CSRCS += $(LVGL_DIR)/lv_drivers/display/sunxifb.c
+
+OBJEXT ?= .o
+AOBJS = $(ASRCS:.S=$(OBJEXT))
+COBJS = $(CSRCS:.c=$(OBJEXT))
+MAINOBJ = $(APP_SRCS:.c=$(OBJEXT))
+
+.PHONY: all clean
+
+all: $(BIN)
+
+%.o: %.c
+	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo "CC $<"
+
+$(BIN): $(AOBJS) $(COBJS) $(MAINOBJ)
+	$(CC) -o $@ $(MAINOBJ) $(AOBJS) $(COBJS) $(LDFLAGS)
+
+clean:
+	rm -f $(BIN) $(AOBJS) $(COBJS) $(MAINOBJ)

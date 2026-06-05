@@ -1,0 +1,70 @@
+# Operating system
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor and IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+*.bak
+*.log
+
+# Hardware EDA temporary files
+*.autosave
+*.backup
+*.bck
+*.lck
+*.lock
+*.cache
+*.drc
+*.erc
+*.rpt
+
+# Generated archives and manufacturing output
+# Keep these commented if you want to version release-ready Gerbers/BOMs.
+# *.zip
+# Gerber*/
+# gerber*/
+# BOM*/
+# bom*/
+
+# Public repository caution: keep redistributable source/docs in git, not
+# copyrighted font packages or vendor datasheet PDFs unless their license allows it.
+Software/assets/fonts/**/*.ttf
+Software/assets/fonts/**/*.otf
+Software/assets/fonts/**/*.zip
+Software/docs/datasheets/*.pdf
+Software/docs/datasheets/*.PDF
+
+# Firmware and software build outputs
+build/
+Software/build/
+dist/
+out/
+Debug/
+Release/
+.pio/
+.platformio/
+cmake-build-*/
+*.o
+*.obj
+*.elf
+*.bin
+Software/ecg_monitor_t113
+Software/ecg_monitor_sdl2_preview
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node.js
+node_modules/
+Software/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
